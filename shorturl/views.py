@@ -51,4 +51,22 @@ class DeleteURL(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except ShortURL.DoesNotExist:
             return Response({'detail': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
-        
+
+
+
+#get url statics
+class URLStats(APIView):
+    def get(self, request, code):
+        try:
+            short_url = ShortURL.objects.get(short_code=code)
+            data = {
+                "id": short_url.id,
+                "url": short_url.url,
+                "shortCode": short_url.short_code,
+                "createdAt": short_url.created_at,
+                "updatedAt": short_url.updated_at,
+                "accessCount": short_url.access_count
+            }
+            return Response(data)
+        except ShortURL.DoesNotExist:
+            return Response({'detail': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
