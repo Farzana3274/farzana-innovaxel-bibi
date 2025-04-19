@@ -40,3 +40,15 @@ class UpdateURL(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except ShortURL.DoesNotExist:
             return Response({'detail': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+
+#delete url
+class DeleteURL(APIView):
+    def delete(self, request, code):
+        try:
+            short_url = ShortURL.objects.get(short_code=code)
+            short_url.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except ShortURL.DoesNotExist:
+            return Response({'detail': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
+        
